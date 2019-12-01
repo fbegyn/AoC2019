@@ -59,7 +59,6 @@ func calcFuel(mass int) (f int) {
 	fuelNeeded := (mass / 3) - 2
 	if fuelNeeded <= 0 {
 		return 0
-	} else {
-		return fuelNeeded + calcFuel(fuelNeeded)
 	}
+	return fuelNeeded + calcFuel(fuelNeeded)
 }
