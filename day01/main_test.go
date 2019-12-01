@@ -6,12 +6,12 @@ import (
 
 func Test_calcFuel(t *testing.T) {
 	type args struct {
-		mass float64
+		mass int
 	}
 	tests := []struct {
 		name  string
 		args  args
-		wantF float64
+		wantF int
 	}{
 		{"simple", args{12}, 2},
 		{"average", args{1969}, 966},

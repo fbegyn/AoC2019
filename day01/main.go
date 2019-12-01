@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"math"
 	"strconv"
 )
 
@@ -20,32 +19,32 @@ func part1(file string) (level int) {
 	fi := OpenFile(file)
 	defer fi.Close()
 
-	var fuelLevels []float64
+	var fuelLevels []int
 
 	scanner := bufio.NewScanner(fi)
 	for scanner.Scan() {
 		line := scanner.Text()
-		rocketMass, err := strconv.ParseFloat(line, 64)
+		rocketMass, err := strconv.Atoi(line)
 		if err != nil {
 			log.Fatalf("Failed to parse line into number: %v", err)
 		}
-		fuelNeeded := math.Floor(rocketMass/3) - 2
+		fuelNeeded := (rocketMass / 3) - 2
 		fuelLevels = append(fuelLevels, fuelNeeded)
 	}
 
-	return int(SumOfFloat64Array(fuelLevels))
+	return SumOfIntArray(fuelLevels)
 }
 
 func part2(file string) (level int) {
 	fi := OpenFile(file)
 	defer fi.Close()
 
-	var fuelLevels []float64
+	var fuelLevels []int
 
 	scanner := bufio.NewScanner(fi)
 	for scanner.Scan() {
 		line := scanner.Text()
-		mass, err := strconv.ParseFloat(line, 64)
+		mass, err := strconv.Atoi(line)
 		if err != nil {
 			log.Fatalf("Failed to parse line into number: %v", err)
 		}
@@ -53,11 +52,11 @@ func part2(file string) (level int) {
 		fuelLevels = append(fuelLevels, fuelNeeded)
 	}
 
-	return int(SumOfFloat64Array(fuelLevels))
+	return SumOfIntArray(fuelLevels)
 }
 
-func calcFuel(mass float64) (f float64) {
-	fuelNeeded := math.Floor(mass/3) - 2
+func calcFuel(mass int) (f int) {
+	fuelNeeded := (mass / 3) - 2
 	if fuelNeeded <= 0 {
 		return 0
 	} else {
