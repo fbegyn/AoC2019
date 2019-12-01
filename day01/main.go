@@ -5,45 +5,55 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 	"strconv"
 )
 
 func main() {
-	src, err := os.Open("./input.txt")
-	if err != nil {
-		log.Fatalf("failed to read file into scanner: %v", err)
-	}
-	defer src.Close()
+	level := part1("./input.txt")
+	level2 := part2("./input.txt")
+	fmt.Printf("Total fuel level: %d\n", level)
+	fmt.Printf("Total fuel level (with fuel): %d\n", int(level2))
 
-	var fuelLevels []int
-	var fuelLevels2 []float64
+}
 
-	scanner := bufio.NewScanner(src)
+func part1(file string) (level int) {
+	fi := OpenFile(file)
+	defer fi.Close()
+
+	var fuelLevels []float64
+
+	scanner := bufio.NewScanner(fi)
 	for scanner.Scan() {
 		line := scanner.Text()
 		rocketMass, err := strconv.ParseFloat(line, 64)
 		if err != nil {
-			log.Fatalf("Failed to parse line into numbber: %v", err)
+			log.Fatalf("Failed to parse line into number: %v", err)
 		}
-		fuelNeeded := int(math.Floor(rocketMass/3) - 2)
+		fuelNeeded := math.Floor(rocketMass/3) - 2
 		fuelLevels = append(fuelLevels, fuelNeeded)
-		fuelLevels2 = append(fuelLevels2, calcFuel(rocketMass))
-
 	}
 
-	level := 0
-	for _, v := range fuelLevels {
-		level += v
+	return int(SumOfFloat64Array(fuelLevels))
+}
+
+func part2(file string) (level int) {
+	fi := OpenFile(file)
+	defer fi.Close()
+
+	var fuelLevels []float64
+
+	scanner := bufio.NewScanner(fi)
+	for scanner.Scan() {
+		line := scanner.Text()
+		mass, err := strconv.ParseFloat(line, 64)
+		if err != nil {
+			log.Fatalf("Failed to parse line into number: %v", err)
+		}
+		fuelNeeded := calcFuel(mass)
+		fuelLevels = append(fuelLevels, fuelNeeded)
 	}
 
-	level2 := float64(0)
-	for _, v := range fuelLevels2 {
-		level2 += v
-	}
-
-	fmt.Printf("Total fuel level: %d\n", level)
-	fmt.Printf("Total fuel level (with fuel): %d\n", int(level2))
+	return int(SumOfFloat64Array(fuelLevels))
 }
 
 func calcFuel(mass float64) (f float64) {
