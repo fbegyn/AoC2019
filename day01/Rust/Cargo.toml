@@ -1,0 +1,9 @@
+[package]
+name = "AoC2019/day01"
+version = "0.1.0"
+authors = ["Francis Begyn <francis@begyn.be>"]
+edition = "2019"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
