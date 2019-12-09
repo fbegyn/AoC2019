@@ -81,15 +81,15 @@ func AllPermutations(values []int) (result [][]int) {
 	return
 }
 
-func RunProgram(program []int, input <-chan int, output chan<- int, halt chan<- bool) {
-	mem := make([]int, len(program))
+func RunProgram(program []int64, input <-chan int64, output chan<- int64, halt chan<- bool) {
+	mem := make([]int64, len(program))
 	copy(mem, program)
-	pc, relBase := int(0), int(0)
+	pc, relBase := int64(0), int64(0)
 
 	for {
 		opcode := mem[pc] % 100
 		modesNumber := mem[pc] / 100
-		modes := make([]int, 3)
+		modes := make([]int64, 3)
 		i := 0
 		for modesNumber > 0 {
 			modes[i] = modesNumber % 10
@@ -114,6 +114,10 @@ func RunProgram(program []int, input <-chan int, output chan<- int, halt chan<- 
 			case 2:
 				opB = mem[relBase+opB]
 			}
+			switch modes[2] {
+			case 2:
+				dest = relBase + dest
+			}
 			mem[dest] = opA + opB
 			pc += 4
 		case 2:
@@ -133,16 +137,19 @@ func RunProgram(program []int, input <-chan int, output chan<- int, halt chan<- 
 			case 2:
 				opB = mem[relBase+opB]
 			}
+			switch modes[2] {
+			case 2:
+				dest = relBase + dest
+			}
 			mem[dest] = opA * opB
 			pc += 4
 		case 3:
 			params := getParam(mem[pc:], 1)
 			dest := params[0]
-			// fmt.Print("Entememinput: ")
-			// _, err := fmt.Scanf("%d", &id)
-			// if err != nil {
-			// 	log.Fatalf("Could not convert string to id: %v\n", err)
-			// }
+			switch modes[0] {
+			case 2:
+				dest = relBase + dest
+			}
 			mem[dest] = <-input
 			pc += 2
 		case 4:
@@ -215,6 +222,10 @@ func RunProgram(program []int, input <-chan int, output chan<- int, halt chan<- 
 			case 2:
 				opB = mem[relBase+opB]
 			}
+			switch modes[2] {
+			case 2:
+				dest = relBase + dest
+			}
 			if opA < opB {
 				mem[dest] = 1
 			} else {
@@ -237,6 +248,10 @@ func RunProgram(program []int, input <-chan int, output chan<- int, halt chan<- 
 				opB = mem[opB]
 			case 2:
 				opB = mem[relBase+opB]
+			}
+			switch modes[2] {
+			case 2:
+				dest = relBase + dest
 			}
 			if opA == opB {
 				mem[dest] = 1
@@ -263,9 +278,9 @@ func RunProgram(program []int, input <-chan int, output chan<- int, halt chan<- 
 	}
 }
 
-func getParam(program []int, param int) []int {
-	params := make([]int, param)
-	for i := int(0); i < param; i++ {
+func getParam(program []int64, param int64) []int64 {
+	params := make([]int64, param)
+	for i := int64(0); i < param; i++ {
 		params[i] = program[i+1]
 	}
 	return params
