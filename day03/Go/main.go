@@ -6,14 +6,22 @@ import (
 	"log"
 	"strconv"
 	"strings"
+
+	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
-var directionMapX map[string]int = map[string]int{"U": 0, "D": 0, "L": 1, "R": -1}
-var directionMapY map[string]int = map[string]int{"U": 1, "D": -1, "L": 0, "R": -0}
+var (
+	input                        = kingpin.Arg("input file", "file to read").Default("input.txt").String()
+	steps                        = kingpin.Arg("time steps", "amount of time steps to take").Default("1000").Int()
+	directionMapX map[string]int = map[string]int{"U": 0, "D": 0, "L": 1, "R": -1}
+	directionMapY map[string]int = map[string]int{"U": 1, "D": -1, "L": 0, "R": -0}
+)
 
 func main() {
+	kingpin.Version("0.1.0")
+	kingpin.Parse()
 
-	fi := OpenFile("./input.txt")
+	fi := OpenFile(*input)
 	defer fi.Close()
 
 	b, err := ioutil.ReadAll(fi)

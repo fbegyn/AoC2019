@@ -4,10 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"strings"
+
+	kingpin "gopkg.in/alecthomas/kingpin.v2"
+)
+
+var (
+	input = kingpin.Arg("input file", "file to read").Default("input.txt").String()
+	steps = kingpin.Arg("time steps", "amount of time steps to take").Default("1000").Int()
 )
 
 func main() {
-	orbits := getOrbits("./input.txt")
+	kingpin.Version("0.1.0")
+	kingpin.Parse()
+
+	orbits := getOrbits(*input)
 
 	orbTotal := part1(orbits)
 	fmt.Printf("Total direct and indirect orbits: %d\n", orbTotal)

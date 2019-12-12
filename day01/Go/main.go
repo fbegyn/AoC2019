@@ -5,11 +5,21 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+
+	kingpin "gopkg.in/alecthomas/kingpin.v2"
+)
+
+var (
+	input = kingpin.Arg("input file", "file to read").Default("input.txt").String()
+	steps = kingpin.Arg("time steps", "amount of time steps to take").Default("1000").Int()
 )
 
 func main() {
-	level := part1("./input.txt")
-	level2 := part2("./input.txt")
+	kingpin.Version("0.1.0")
+	kingpin.Parse()
+
+	level := part1(*input)
+	level2 := part2(*input)
 	fmt.Printf("Total fuel level: %d\n", level)
 	fmt.Printf("Total fuel level (with fuel): %d\n", int(level2))
 
